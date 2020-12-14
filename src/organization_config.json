@@ -1,8 +1,27 @@
 {
+    "swaggerhub": true,
     "orgData": {
         "orgName": "The_Empire",
         "displayName": "The Galactic Empire",
         "displayTag": "Home of the Galaxies Greatest APIs",
         "displayImage": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Emblem_of_the_First_Galactic_Empire.svg/220px-Emblem_of_the_First_Galactic_Empire.svg.png"
-    }
+    },
+    "services" : [
+        {
+            "name": "service1",
+            "displayName": "Service 1 name",
+            "description": "Service 1 description",
+            "type": "Swagger",
+            "version": "0.1.0,",
+            "swaggerJsonUrl": "http://www.example.com/swagger.json"
+        },
+        {
+            "name": "service2",
+            "displayName": "Service 2 name",
+            "description": "Service 2 description",
+            "type": "Swagger",
+            "version": "0.1.0,",
+            "swaggerJsonUrl": "http://www.foobar.com/swagger.json"
+        }
+    ]
 }
