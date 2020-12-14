@@ -1,0 +1,65 @@
+version: v1beta9
+images:
+  app:
+    image: gcr.io/title-block-ai/api-docs
+    preferSyncOverRebuild: true
+    injectRestartHelper: true
+    appendDockerfileInstructions:
+    - USER root
+deployments:
+- name: api-docs
+  namespace: "intelme-core"
+  helm:
+    componentChart: true
+    values:
+      containers:
+      - image: gcr.io/title-block-ai/api-docs
+        env:
+      service:
+        ports:
+        - port: 3000
+      ingress:
+        ingressClass: kong
+        tls: false
+        rules:
+        - path: /docs/
+        annotations:
+          kubernetes.io/ingress.class: kong
+dev:
+
+  ports:
+  - imageName: app
+    forward:
+    - port: 3000
+    - port: 9229 
+  open:
+  - url: http://localhost:3000
+  sync:
+  - imageName: app
+    excludePaths:
+    - .git/
+    uploadExcludePaths:
+    - Dockerfile
+    - node_modules/
+    - devspace.yaml
+    onUpload:
+      restartContainer: true
+profiles:
+- name: production
+  patches:
+  - op: remove
+    path: images.app.injectRestartHelper
+  - op: remove
+    path: images.app.appendDockerfileInstructions
+- name: debugging
+  patches:
+  - op: add
+    path: dev.interactive
+    value:
+      defaultEnabled: true
+  - op: add
+    path: images.app.entrypoint
+    value:
+    - node
+    - --inspect=0.0.0.0:9229
+    - app/server.js
